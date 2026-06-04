@@ -83,14 +83,28 @@ launchd (22:00 daily)
 
 ### The content repo
 
-By default the script expects the clone at:
+This path is **per-machine** — there is no canonical location. The script falls
+back to:
 
 ```
 ~/Development/sonobe-element-root/element-research
 ```
 
-Clone it there, or point `SPARK_TRANSCRIPTS_REPO` / the `install.sh` argument at
-another location. Transcripts are written to its `transcripts/` subfolder.
+…only because that's where it happened to live on the first machine. **You very
+likely have `element-research` cloned somewhere else**, so point the script at
+your actual clone instead of assuming the default. Either:
+
+- pass the path to `install.sh` (recommended): `./install.sh /your/path/to/element-research`, or
+- set `SPARK_TRANSCRIPTS_REPO=/your/path/to/element-research`.
+
+Don't have it cloned yet? Clone `element-research` anywhere you like and use that
+path. Not sure where it already is? Find it with:
+
+```bash
+find ~ -type d -name element-research -not -path '*/.*' 2>/dev/null
+```
+
+Transcripts are written to the repo's `transcripts/` subfolder.
 
 ---
 
@@ -162,8 +176,9 @@ script is built for this:
 - **Push decoupled from new work** — any local commit ahead of `origin` is
   pushed, including one stranded by an earlier failed push.
 
-To onboard a teammate: install Spark Desktop + the `spark` CLI, clone
-`element-research`, then run `./install.sh`. Done.
+To onboard a teammate: install Spark Desktop + activate the `spark` CLI, clone
+`element-research` (anywhere), then run `./install.sh /their/path/to/element-research`
+with **their own** repo path. Done.
 
 ---
 
