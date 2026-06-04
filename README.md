@@ -62,10 +62,24 @@ launchd (22:00 daily)
 ## Prerequisites
 
 - **macOS** (uses `launchd`).
-- **Spark Desktop**, installed and signed in to the user's account.
-- The **`spark` CLI** at `/usr/local/bin/spark` (or set `SPARK_BIN`).
+- **Spark Desktop**, installed and signed in, with at least one mail account
+  connected.
+- The **`spark` CLI**, activated **from inside the Spark Desktop app** (it is not
+  a standalone install — the CLI is a thin IPC client to the running app):
+  1. In Spark Desktop go to **Settings → AI Agents → Connect AI Agents → Setup CLI**.
+  2. Click **Continue** to grant agent access.
+  3. Set the access level for the relevant account to at least **Read** (gives
+     visibility into mail, calendar, and meeting notes — which is all this job
+     needs; `Triage` is not required, `Off` will not work).
+  4. Confirm the binary is at `/usr/local/bin/spark` (or set `SPARK_BIN`), e.g.
+     `spark accounts` should list the account. On the Mac App Store build the
+     helper occasionally needs a manual verification step before the CLI
+     connects — see the Spark docs linked below.
 - A clone of **`element-research`** (the content repo) with push access.
 - `git`, `bash`, `awk`, `sed` (stock on macOS).
+
+> Spark CLI setup docs:
+> <https://sparkmailapp.com/help/spark-cli/set-up-spark-cli-with-your-ai-agents>
 
 ### The content repo
 
