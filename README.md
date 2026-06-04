@@ -97,6 +97,16 @@ bash ~/.local/bin/transfer-spark-transcripts.sh
 tail -n 20 ~/Library/Logs/spark-transcripts.log
 ```
 
+> **Required: do a test run before considering setup complete.** An agent (or
+> person) installing this MUST run the script manually once and confirm it
+> works — do not rely on the 22:00 schedule to surface problems. A healthy run
+> ends with a `=== run end (N new) ===` line and either `pushed to origin/<branch>`
+> or `nothing to push`. If you see any `ERROR:` or `warn:` line (e.g. Spark not
+> reachable, repo not found, push failed), fix it before finishing — see
+> [Operations & troubleshooting](#operations--troubleshooting). On the very first
+> run, also confirm a new file landed in `element-research/transcripts/` and was
+> committed/pushed.
+
 `install.sh` is idempotent — re-run it after pulling updates to redeploy.
 
 ### Manual install (alternative)
