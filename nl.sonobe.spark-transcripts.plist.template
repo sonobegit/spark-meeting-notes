@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Reference template. Prefer `./install.sh`, which generates this file with the
+  correct absolute paths for the current user. launchd does NOT expand ~ or
+  $HOME, so every path below must be absolute.
+
+  Manual install: replace __SCRIPT_PATH__ and __LOG_PATH__ with absolute paths,
+  drop the file at ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist, then
+  `launchctl load` it. If your element-research clone is NOT at the default
+  ($HOME/Development/sonobe-element-root/element-research), uncomment the
+  EnvironmentVariables block and set SPARK_TRANSCRIPTS_REPO.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>nl.sonobe.spark-transcripts</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__SCRIPT_PATH__</string>
+    </array>
+
+    <!--
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>SPARK_TRANSCRIPTS_REPO</key>
+        <string>/Users/USERNAME/path/to/element-research</string>
+    </dict>
+    -->
+
+    <!-- Daily at 22:00 system-local time -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>22</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Don't run when the agent is (re)loaded, only on schedule -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_PATH__</string>
+    <key>StandardErrorPath</key>
+    <string>__LOG_PATH__</string>
+</dict>
+</plist>
