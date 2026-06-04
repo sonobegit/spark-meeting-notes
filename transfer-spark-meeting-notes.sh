@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# transfer-spark-transcripts.sh
+# transfer-spark-meeting-notes.sh
 #
 # Daily job (launchd): pull new meeting-note summaries from the Spark mail app
 # and commit them to the element-research repo.
@@ -11,10 +11,10 @@
 #     local commits even when this run found nothing new.
 #
 # Config via environment (optional):
-#   SPARK_TRANSCRIPTS_REPO  path to the element-research clone
+#   SPARK_MEETING_NOTES_REPO  path to the element-research clone
 #   SPARK_BIN               path to the spark CLI
 #
-# Managed by ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist
+# Managed by ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
 # See README.md for setup and the multi-writer / team design.
 
 set -uo pipefail
@@ -22,7 +22,7 @@ set -uo pipefail
 # launchd gives a minimal PATH; pin the tools we call.
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-readonly REPO="${SPARK_TRANSCRIPTS_REPO:-$HOME/Development/sonobe-element-root/element-research}"
+readonly REPO="${SPARK_MEETING_NOTES_REPO:-$HOME/Development/sonobe-element-root/element-research}"
 readonly DEST="$REPO/transcripts"
 # Per-user manifest so teammates can write to the same repo without fighting
 # over one shared dedup file (their meeting IDs never collide with ours anyway).

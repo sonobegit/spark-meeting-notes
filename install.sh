@@ -6,23 +6,23 @@
 #   ./install.sh [/path/to/element-research]
 #
 # - Copies the script to ~/.local/bin
-# - Generates ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist with
+# - Generates ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist with
 #   absolute paths for THIS user (launchd does not expand ~ or $HOME)
 # - (Re)loads the launchd agent
 #
-# Idempotent: safe to re-run. Pass a repo path (or set SPARK_TRANSCRIPTS_REPO)
+# Idempotent: safe to re-run. Pass a repo path (or set SPARK_MEETING_NOTES_REPO)
 # only if your element-research clone is NOT at the default location below.
 
 set -euo pipefail
 
-readonly LABEL="nl.sonobe.spark-transcripts"
+readonly LABEL="nl.sonobe.spark-meeting-notes"
 readonly SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 readonly BIN_DIR="$HOME/.local/bin"
-readonly SCRIPT_DST="$BIN_DIR/transfer-spark-transcripts.sh"
+readonly SCRIPT_DST="$BIN_DIR/transfer-spark-meeting-notes.sh"
 readonly PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
-readonly LOG="$HOME/Library/Logs/spark-transcripts.log"
+readonly LOG="$HOME/Library/Logs/spark-meeting-notes.log"
 readonly DEFAULT_REPO="$HOME/Development/sonobe-element-root/element-research"
-readonly REPO="${1:-${SPARK_TRANSCRIPTS_REPO:-$DEFAULT_REPO}}"
+readonly REPO="${1:-${SPARK_MEETING_NOTES_REPO:-$DEFAULT_REPO}}"
 
 echo "Installing $LABEL for $(id -un)"
 echo "  script : $SCRIPT_DST"
@@ -33,7 +33,7 @@ echo "  repo   : $REPO"
 [ -d "$REPO/.git" ] || echo "WARNING: $REPO is not a git clone yet — clone element-research there before the first run."
 
 mkdir -p "$BIN_DIR" "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
-install -m 0755 "$SRC_DIR/transfer-spark-transcripts.sh" "$SCRIPT_DST"
+install -m 0755 "$SRC_DIR/transfer-spark-meeting-notes.sh" "$SCRIPT_DST"
 
 # Only pin the repo via an env override when it isn't the default location.
 env_block=""
@@ -41,7 +41,7 @@ if [ "$REPO" != "$DEFAULT_REPO" ]; then
   env_block="
     <key>EnvironmentVariables</key>
     <dict>
-        <key>SPARK_TRANSCRIPTS_REPO</key>
+        <key>SPARK_MEETING_NOTES_REPO</key>
         <string>$REPO</string>
     </dict>"
 fi

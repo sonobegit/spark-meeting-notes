@@ -5,16 +5,16 @@
   $HOME, so every path below must be absolute.
 
   Manual install: replace __SCRIPT_PATH__ and __LOG_PATH__ with absolute paths,
-  drop the file at ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist, then
+  drop the file at ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist, then
   `launchctl load` it. If your element-research clone is NOT at the default
   ($HOME/Development/sonobe-element-root/element-research), uncomment the
-  EnvironmentVariables block and set SPARK_TRANSCRIPTS_REPO.
+  EnvironmentVariables block and set SPARK_MEETING_NOTES_REPO.
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>nl.sonobe.spark-transcripts</string>
+    <string>nl.sonobe.spark-meeting-notes</string>
 
     <key>ProgramArguments</key>
     <array>
@@ -25,7 +25,7 @@
     <!--
     <key>EnvironmentVariables</key>
     <dict>
-        <key>SPARK_TRANSCRIPTS_REPO</key>
+        <key>SPARK_MEETING_NOTES_REPO</key>
         <string>/Users/USERNAME/path/to/element-research</string>
     </dict>
     -->

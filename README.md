@@ -1,4 +1,4 @@
-# spark-transcripts
+# spark-meeting-notes
 
 Daily automation that pulls **Spark +AI meeting-note summaries** from the Spark
 mail app and commits them to the [`element-research`](#the-content-repo) git repo.
@@ -30,7 +30,7 @@ is retried on the next run even if that run found nothing new.
 
 ```
 launchd (22:00 daily)
-  └─ ~/.local/bin/transfer-spark-transcripts.sh
+  └─ ~/.local/bin/transfer-spark-meeting-notes.sh
        ├─ open -a "Spark Desktop"      # ensure the app is running
        ├─ spark accounts               # readiness probe (waits up to ~60s)
        ├─ spark meetings               # list IDs (own account only — see Caveats)
@@ -44,7 +44,7 @@ launchd (22:00 daily)
 - **Schedule**: `StartCalendarInterval` at 22:00. If the Mac is asleep at 22:00,
   launchd runs the job once on next wake (no multi-day catch-up — harmless here
   because dedup makes every run idempotent).
-- **Logs**: `~/Library/Logs/spark-transcripts.log` (appended; not rotated).
+- **Logs**: `~/Library/Logs/spark-meeting-notes.log` (appended; not rotated).
 
 ---
 
@@ -52,9 +52,9 @@ launchd (22:00 daily)
 
 | File | Purpose |
 |------|---------|
-| `transfer-spark-transcripts.sh` | The job. Portable (`$HOME`, env overrides). |
+| `transfer-spark-meeting-notes.sh` | The job. Portable (`$HOME`, env overrides). |
 | `install.sh` | Deploys the script + generates & loads the launchd plist for the current user. |
-| `nl.sonobe.spark-transcripts.plist.template` | Reference plist for manual installs. |
+| `nl.sonobe.spark-meeting-notes.plist.template` | Reference plist for manual installs. |
 | `README.md` | This file. |
 
 ---
@@ -95,7 +95,7 @@ likely have `element-research` cloned somewhere else**, so point the script at
 your actual clone instead of assuming the default. Either:
 
 - pass the path to `install.sh` (recommended): `./install.sh /your/path/to/element-research`, or
-- set `SPARK_TRANSCRIPTS_REPO=/your/path/to/element-research`.
+- set `SPARK_MEETING_NOTES_REPO=/your/path/to/element-research`.
 
 Don't have it cloned yet? Clone `element-research` anywhere you like and use that
 path. Not sure where it already is? Find it with:
@@ -111,8 +111,8 @@ Transcripts are written to the repo's `transcripts/` subfolder.
 ## Quick start
 
 ```bash
-git clone <this-repo-url> ~/Development/spark-transcripts
-cd ~/Development/spark-transcripts
+git clone <this-repo-url> ~/Development/spark-meeting-notes
+cd ~/Development/spark-meeting-notes
 
 # Default repo location:
 ./install.sh
@@ -121,8 +121,8 @@ cd ~/Development/spark-transcripts
 ./install.sh /path/to/element-research
 
 # Verify with a manual run (don't wait for 22:00):
-bash ~/.local/bin/transfer-spark-transcripts.sh
-tail -n 20 ~/Library/Logs/spark-transcripts.log
+bash ~/.local/bin/transfer-spark-meeting-notes.sh
+tail -n 20 ~/Library/Logs/spark-meeting-notes.log
 ```
 
 > **Required: do a test run before considering setup complete.** An agent (or
@@ -139,13 +139,13 @@ tail -n 20 ~/Library/Logs/spark-transcripts.log
 
 ### Manual install (alternative)
 
-1. Copy `transfer-spark-transcripts.sh` to `~/.local/bin/` and `chmod +x` it.
-2. Copy `nl.sonobe.spark-transcripts.plist.template` to
-   `~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist`, replacing
+1. Copy `transfer-spark-meeting-notes.sh` to `~/.local/bin/` and `chmod +x` it.
+2. Copy `nl.sonobe.spark-meeting-notes.plist.template` to
+   `~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist`, replacing
    `__SCRIPT_PATH__` and `__LOG_PATH__` with **absolute** paths (launchd does not
-   expand `~`/`$HOME`). Set `SPARK_TRANSCRIPTS_REPO` in the env block if your
+   expand `~`/`$HOME`). Set `SPARK_MEETING_NOTES_REPO` in the env block if your
    clone is not at the default path.
-3. `launchctl load ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist`
+3. `launchctl load ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist`
 
 ---
 
@@ -153,7 +153,7 @@ tail -n 20 ~/Library/Logs/spark-transcripts.log
 
 | Env var | Default | Meaning |
 |---------|---------|---------|
-| `SPARK_TRANSCRIPTS_REPO` | `~/Development/sonobe-element-root/element-research` | Path to the element-research clone. |
+| `SPARK_MEETING_NOTES_REPO` | `~/Development/sonobe-element-root/element-research` | Path to the element-research clone. |
 | `SPARK_BIN` | `/usr/local/bin/spark` | Path to the spark CLI. |
 
 Change the schedule by editing `StartCalendarInterval` in the plist (then reload
@@ -201,15 +201,15 @@ with **their own** repo path. Done.
 
 ```bash
 # Is the agent loaded?
-launchctl list | grep spark-transcripts        # col 2 = last exit code (0 = ok)
+launchctl list | grep spark-meeting-notes        # col 2 = last exit code (0 = ok)
 
 # Run now, watch output
-bash ~/.local/bin/transfer-spark-transcripts.sh
-tail -n 40 ~/Library/Logs/spark-transcripts.log
+bash ~/.local/bin/transfer-spark-meeting-notes.sh
+tail -n 40 ~/Library/Logs/spark-meeting-notes.log
 
 # Reload after editing the plist
-launchctl unload ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist
-launchctl load   ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist
+launchctl unload ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
+launchctl load   ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
 ```
 
 Common log lines and what they mean:
@@ -218,7 +218,7 @@ Common log lines and what they mean:
 |----------|------------------|
 | `Spark Desktop did not become reachable within ~60s` | App not installed / not signed in / slow launch. Open Spark manually and retry. |
 | `spark CLI not found at …` | Install the CLI or set `SPARK_BIN`. |
-| `repo not found at …` | Clone element-research or set `SPARK_TRANSCRIPTS_REPO`. |
+| `repo not found at …` | Clone element-research or set `SPARK_MEETING_NOTES_REPO`. |
 | `warn: pull --rebase failed` | Remote diverged or offline; the run still tries to push. Resolve manually if it persists. |
 | `warn: git push failed …` | Usually credentials in launchd's minimal env (SSH key/keychain not reachable). Confirm `git push` works from a plain shell; the commit retries next run. |
 | `nothing to push` | Up to date — normal. |
@@ -226,8 +226,8 @@ Common log lines and what they mean:
 ### Uninstall
 
 ```bash
-launchctl unload ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist
-rm ~/Library/LaunchAgents/nl.sonobe.spark-transcripts.plist
-rm ~/.local/bin/transfer-spark-transcripts.sh
+launchctl unload ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
+rm ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
+rm ~/.local/bin/transfer-spark-meeting-notes.sh
 # logs and the per-user manifest can be left or removed as desired
 ```
