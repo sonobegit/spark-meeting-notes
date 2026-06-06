@@ -3,7 +3,7 @@
 # transfer-spark-meeting-notes.sh
 #
 # Daily job (launchd): pull new meeting-note summaries from the Spark mail app
-# and commit them to the element-research repo.
+# and commit them to the sonobe-brain monorepo (meeting-notes/).
 #
 #   - Summary only (spark meeting <id>, no --transcript) per user preference.
 #   - Dedup via a git-tracked, per-user manifest of already-processed IDs.
@@ -11,7 +11,7 @@
 #     local commits even when this run found nothing new.
 #
 # Config via environment (optional):
-#   SPARK_MEETING_NOTES_REPO  path to the element-research clone
+#   SPARK_MEETING_NOTES_REPO  path to the sonobe-brain clone
 #   SPARK_BIN               path to the spark CLI
 #
 # Managed by ~/Library/LaunchAgents/nl.sonobe.spark-meeting-notes.plist
@@ -22,8 +22,8 @@ set -uo pipefail
 # launchd gives a minimal PATH; pin the tools we call.
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-readonly REPO="${SPARK_MEETING_NOTES_REPO:-$HOME/Development/sonobe-element-root/element-research}"
-readonly DEST="$REPO/transcripts"
+readonly REPO="${SPARK_MEETING_NOTES_REPO:-$HOME/Development/sonobe-brain}"
+readonly DEST="$REPO/meeting-notes"
 # Per-user manifest so teammates can write to the same repo without fighting
 # over one shared dedup file (their meeting IDs never collide with ours anyway).
 readonly MANIFEST="$DEST/.processed-ids-$(id -un)"
@@ -103,7 +103,7 @@ if [ "$new_count" -gt 0 ]; then
   uniq_dates="$(printf '%s\n' $new_dates | sort -u | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
   msg="Add meeting transcript(s) from ${uniq_dates}"
 
-  git -C "$REPO" add transcripts/ || die "git add failed"
+  git -C "$REPO" add meeting-notes/ || die "git add failed"
   git -C "$REPO" commit -q -m "$msg" || die "git commit failed"
   log "committed: $msg"
 else

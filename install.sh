@@ -21,7 +21,7 @@ readonly BIN_DIR="$HOME/.local/bin"
 readonly SCRIPT_DST="$BIN_DIR/transfer-spark-meeting-notes.sh"
 readonly PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 readonly LOG="$HOME/Library/Logs/spark-meeting-notes.log"
-readonly DEFAULT_REPO="$HOME/Development/sonobe-element-root/element-research"
+readonly DEFAULT_REPO="$HOME/Development/sonobe-brain"
 readonly REPO="${1:-${SPARK_MEETING_NOTES_REPO:-$DEFAULT_REPO}}"
 
 echo "Installing $LABEL for $(id -un)"
